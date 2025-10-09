@@ -9,11 +9,11 @@ void serialization(struct message msg,char* buffer);
 struct message deserialization(char* buffer);
 void* client_receive_messages(void* socket_desc);
 //HashMap 
-void add_mapping(char *username,int socket_fd,struct username_to_fd_map *head);
+void add_mapping(char *username,int socket_fd,struct username_to_fd_map **head_ptr);
 
 struct username_to_fd_map* find_mapping(char* username,struct username_to_fd_map *head);
 
-void delete_mapping(struct username_to_fd_map* entry,struct username_to_fd_map *head);
+void delete_mapping(struct username_to_fd_map* entry,struct username_to_fd_map **head_ptr);
 
 
 #endif

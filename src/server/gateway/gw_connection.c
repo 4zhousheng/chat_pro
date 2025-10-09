@@ -77,16 +77,22 @@ void start_server(){
                 }
 
             }else{//对已存在的连接发起请求
-                char buffer[BUFFER_SIZE];
-                ssize_t valread = recv(new_socket,buffer,BUFFER_SIZE-1,0);
+                char buffer[BUFFER_SIZE] = {0};
+                recv(events[n].data.fd,buffer,BUFFER_SIZE,0);
                 struct message msg = deserialization(buffer);
                 switch(msg.header.type){
                     case MSG_TYPE_LOGIN_REQUEST:
-                        add_mapping(msg.origin_user,events[n].data.fd,uf_map);
+                        add_mapping(msg.origin_user,events[n].data.fd,&uf_map);
+                        printf("用户%s登录成功,socket fd:%d\n",msg.origin_user,events[n].data.fd);
+                        fflush(stdout);
+                        break;
                     case MSG_TYPE_CHAT_MESSAGE:
                         struct username_to_fd_map* entry = find_mapping(msg.target_user,uf_map);
                         old_socket = entry->socket_fd;
                         send(old_socket,buffer,BUFFER_SIZE,0);
+                        printf("用户%s向%s发送消息,接收用户fd: %d\n",msg.origin_user,msg.target_user,old_socket);
+                        fflush(stdout);
+                        break;
                 }
             }
         }
