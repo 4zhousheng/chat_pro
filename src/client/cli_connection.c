@@ -55,6 +55,7 @@ void start_connect(){
     //authentication
     struct message login_msg;
     login_msg.header.type = MSG_TYPE_LOGIN_REQUEST;
+    login_msg.header.length = strlen(login_msg.origin_user);
     strncpy(login_msg.origin_user, user, sizeof(login_msg.origin_user) - 1);
     login_msg.origin_user[sizeof(login_msg.origin_user) - 1] = '\0';
     // 保证安全
